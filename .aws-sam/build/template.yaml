@@ -1,0 +1,134 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'credit-app Api for a credit /loan management system.
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+    Environment:
+      Variables:
+        TABLE_NAME:
+          Ref: AuthInfoTbl
+    Tracing: Active
+    LoggingConfig:
+      LogFormat: JSON
+  Api:
+    Cors:
+      AllowMethods: '''GET,POST,OPTIONS'''
+      AllowHeaders: '''content-type'''
+      AllowOrigin: '''*'''
+    TracingEnabled: true
+Resources:
+  AuthInfoTbl:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: AuthInfoTbl
+      PrimaryKey:
+        Name: auth_id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  LoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Signin
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: AuthInfoTbl
+      CodeUri: LoginFunction
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Events:
+        Signin:
+          Type: Api
+          Properties:
+            Path: /auth/sign-in
+            Method: post
+      Environment:
+        Variables:
+          NODE_OPTIONS: ' --enable-source-maps'
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        EntryPoints:
+        - app.ts
+        External:
+        - '@aws-sdk/lib-dynamodb'
+        - '@aws-sdk/client-dynamodb'
+        Minify: true
+        Sourcemap: true
+        Target: ES6
+      SamResourceId: LoginFunction
+  Register:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Signup
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: AuthInfoTbl
+      CodeUri: Register
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Events:
+        Signup:
+          Type: Api
+          Properties:
+            Path: /auth/sign-up
+            Method: post
+      Environment:
+        Variables:
+          NODE_OPTIONS: ' --enable-source-maps'
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        EntryPoints:
+        - app.ts
+        External:
+        - '@aws-sdk/lib-dynamodb'
+        - '@aws-sdk/client-dynamodb'
+        Minify: true
+        Sourcemap: true
+        Target: ES6
+      SamResourceId: Register
+  ForgotPassword:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ForgotPassword
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: AuthInfoTbl
+      CodeUri: ForgotPassword
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+      - x86_64
+      Events:
+        ForgotPasswordEvent:
+          Type: Api
+          Properties:
+            Path: /auth/forgot-password
+            Method: post
+      Environment:
+        Variables:
+          NODE_OPTIONS: ' --enable-source-maps'
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        EntryPoints:
+        - app.ts
+        External:
+        - '@aws-sdk/lib-dynamodb'
+        - '@aws-sdk/client-dynamodb'
+        Minify: true
+        Sourcemap: true
+        Target: ES6
+      SamResourceId: ForgotPassword

@@ -1,0 +1,125 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  credit-app
+  Api for a credit /loan management system.
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref AuthInfoTbl
+    Tracing: Active
+    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
+    LoggingConfig:
+      LogFormat: JSON
+  Api:
+    Cors: 
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'content-type'"
+      AllowOrigin: "'*'"
+    TracingEnabled: true
+Resources:
+  AuthInfoTbl:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: AuthInfoTbl
+      PrimaryKey:
+        Name: auth_id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  LoginFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: Signin
+      Policies:
+        # Give Create/Read/Update/Delete permissions to the sampletable 
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AuthInfoTbl
+      CodeUri: ../credit-app-signin/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        Signin:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /auth/sign-in
+            Method: post
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: ES6
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
+        External:
+          - '@aws-sdk/lib-dynamodb'
+          - '@aws-sdk/client-dynamodb'
+  Register:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: Signup
+      Policies:
+        # Give Create/Read/Update/Delete permissions to the sampletable 
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AuthInfoTbl
+      CodeUri: ../credit-app-signup/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        Signup:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /auth/sign-up
+            Method: post
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: ES6
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
+        External:
+          - '@aws-sdk/lib-dynamodb'
+          - '@aws-sdk/client-dynamodb'
+  ForgotPassword:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: ForgotPassword
+      Policies:
+        # Give Create/Read/Update/Delete permissions to the sampletable 
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AuthInfoTbl
+      CodeUri: ../credit-app-forgotpassword/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        ForgotPasswordEvent:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /auth/forgot-password
+            Method: post
+    Metadata: # Manage esbuild properties
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: ES6
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
+        External:
+          - '@aws-sdk/lib-dynamodb'
+          - '@aws-sdk/client-dynamodb'
+
