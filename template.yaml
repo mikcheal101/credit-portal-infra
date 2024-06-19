@@ -16,7 +16,7 @@ Globals:
     LoggingConfig:
       LogFormat: JSON
   Api:
-    Cors: 
+    Cors:
       AllowMethods: "'GET,POST,OPTIONS'"
       AllowHeaders: "'content-type'"
       AllowOrigin: "'*'"
@@ -37,7 +37,7 @@ Resources:
     Properties:
       FunctionName: Signin
       Policies:
-        # Give Create/Read/Update/Delete permissions to the sampletable 
+        # Give Create/Read/Update/Delete permissions to the sampletable
         - DynamoDBCrudPolicy:
             TableName: !Ref AuthInfoTbl
       CodeUri: ../credit-app-signin/
@@ -67,7 +67,7 @@ Resources:
     Properties:
       FunctionName: Signup
       Policies:
-        # Give Create/Read/Update/Delete permissions to the sampletable 
+        # Give Create/Read/Update/Delete permissions to the sampletable
         - DynamoDBCrudPolicy:
             TableName: !Ref AuthInfoTbl
       CodeUri: ../credit-app-signup/
@@ -97,7 +97,7 @@ Resources:
     Properties:
       FunctionName: ForgotPassword
       Policies:
-        # Give Create/Read/Update/Delete permissions to the sampletable 
+        # Give Create/Read/Update/Delete permissions to the sampletable
         - DynamoDBCrudPolicy:
             TableName: !Ref AuthInfoTbl
       CodeUri: ../credit-app-forgotpassword/
@@ -122,4 +122,29 @@ Resources:
         External:
           - '@aws-sdk/lib-dynamodb'
           - '@aws-sdk/client-dynamodb'
-
+  NotificationService:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Sub
+        - '{{resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2}}'
+      InstanceType: t2.micro
+      KeyName: wallet-tutorial-01
+      SecurityGroups:
+        - !Ref ServicesSecurityGroup
+  ServicesSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH and HTTP and HTTPS
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
