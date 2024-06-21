@@ -2,9 +2,11 @@ name: CD Pipeline credit-portal
 
 # Trigger the jobs only if the push is made to the main branch
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - "CI Pipeline credit-portal"
+    types:
+      - completed
 
 jobs:
   deploy:
