@@ -34,6 +34,7 @@ External = ["@aws-sdk/lib-dynamodb", "@aws-sdk/client-dynamodb"]
 
 
 
+
 [function_build_definitions.9a871c70-9027-4964-aedf-180c3090690c]
 codeuri = "/Users/apple/Documents/tut/tut-js/credit/credit-app-signup"
 runtime = "nodejs20.x"
@@ -67,6 +68,7 @@ External = ["@aws-sdk/lib-dynamodb", "@aws-sdk/client-dynamodb"]
 
 
 
+
 [function_build_definitions.dbf9c1db-fcd1-4ff1-8198-b63bfda93db8]
 codeuri = "/Users/apple/Documents/tut/tut-js/credit/credit-app-forgotpassword"
 runtime = "nodejs20.x"
@@ -86,6 +88,7 @@ Target = "ES6"
 Sourcemap = true
 EntryPoints = ["app.ts"]
 External = ["@aws-sdk/lib-dynamodb", "@aws-sdk/client-dynamodb"]
+
 
 
 
