@@ -6,6 +6,7 @@ codeuri = "/Users/apple/Documents/tut/tut-js/credit/credit-app-signin"
 runtime = "nodejs20.x"
 architecture = "x86_64"
 handler = "app.lambdaHandler"
+source_hash = "a3ee68a25c26e957854d52fecffec14bb4f9e3593d6be6822986943877d5b9af"
 manifest_hash = "5628c2704e246def5324a45166292d99"
 packagetype = "Zip"
 functions = ["LoginFunction"]
@@ -30,11 +31,14 @@ External = ["@aws-sdk/lib-dynamodb", "@aws-sdk/client-dynamodb"]
 
 
 
+
+
 [function_build_definitions.9a871c70-9027-4964-aedf-180c3090690c]
 codeuri = "/Users/apple/Documents/tut/tut-js/credit/credit-app-signup"
 runtime = "nodejs20.x"
 architecture = "x86_64"
 handler = "app.lambdaHandler"
+source_hash = "8acc8b47771029313f666fe5dfbca851102c195743dbd5187cb0f5616c1c26fc"
 manifest_hash = "5628c2704e246def5324a45166292d99"
 packagetype = "Zip"
 functions = ["Register"]
@@ -59,11 +63,14 @@ External = ["@aws-sdk/lib-dynamodb", "@aws-sdk/client-dynamodb"]
 
 
 
+
+
 [function_build_definitions.dbf9c1db-fcd1-4ff1-8198-b63bfda93db8]
 codeuri = "/Users/apple/Documents/tut/tut-js/credit/credit-app-forgotpassword"
 runtime = "nodejs20.x"
 architecture = "x86_64"
 handler = "app.lambdaHandler"
+source_hash = "803d5314ea994a6f0c7aa0ace943030883e834be7baaa3fb1d2d32a25d156aea"
 manifest_hash = "3186354a941a50e7296dbdc33b8be614"
 packagetype = "Zip"
 functions = ["ForgotPassword"]
@@ -77,6 +84,8 @@ Target = "ES6"
 Sourcemap = true
 EntryPoints = ["app.ts"]
 External = ["@aws-sdk/lib-dynamodb", "@aws-sdk/client-dynamodb"]
+
+
 
 
 

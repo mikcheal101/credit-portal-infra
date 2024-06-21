@@ -138,7 +138,6 @@ Resources:
       ImageId:
         Fn::Sub:
         - '{{resolve:ssm:/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2}}'
-        - {}
       InstanceType: t2.micro
       KeyName: wallet-tutorial-01
       SecurityGroups:
