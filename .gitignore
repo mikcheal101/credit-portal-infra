@@ -129,3 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# AWS generated files
+.aws-sam/cache
